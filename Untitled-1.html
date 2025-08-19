@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>立直麻将赛事计分系统</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --primary: #3a0ca3;
+            --secondary: #4361ee;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gradient: linear-gradient(135deg, #3a0ca3 0%, #4361ee 100%);
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 14px 28px rgba(0, 0, 0, 0.12), 0 10px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏 */
+        nav {
+            background: var(--gradient);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            margin-left: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: white;
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            padding: 100px 0 70px;
+            text-align: center;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="rgba(58, 12, 163, 0.03)" x="0" y="0" width="100" height="100"/><path fill="none" stroke="rgba(58, 12, 163, 0.05)" stroke-width="2" d="M25,25 L75,75 M75,25 L25,75"/></svg>');
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+        
+        .author-card {
+            display: inline-block;
+            background: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: var(--card-shadow);
+            margin-top: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .author-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .author-card h2 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .author-card p {
+            font-size: 1rem;
+            color: var(--secondary);
+            margin: 0;
+        }
+        
+        /* 功能区域 */
+        .features {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: #6c757d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 1.8rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .feature-card p {
+            color: #6c757d;
+        }
+        
+        /* 行动号召 */
+        .cta {
+            background: var(--gradient);
+            padding: 80px 0;
+            text-align: center;
+            color: white;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: white;
+            color: var(--primary);
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 页脚 */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #f8f9fa;
+        }
+        
+        .footer-section p {
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-top: 15px;
+            }
+            
+            .nav-links li {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animated {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 4H10V10H4V4Z" stroke="white" stroke-width="2"/>
+                    <path d="M14 4H20V10H14V4Z" stroke="white" stroke-width="2"/>
+                    <path d="M4 14H10V20H4V14Z" stroke="white" stroke-width="2"/>
+                    <path d="M14 14H20V20H14V14Z" stroke="white" stroke-width="2"/>
+                </svg>
+                <span>立直麻将计分</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">首页</a></li>
+                <li><a href="#">功能</a></li>
+                <li><a href="#">赛事</a></li>
+                <li><a href="#">关于</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="animated">立直麻将赛事计分系统</h1>
+            <p class="animated delay-1">Riichi Mahjong Tournament Scoring System</p>
+            
+            <div class="author-card animated delay-2">
+                <h2>超级圣光铠甲</h2>
+                <p>Super Holy Armor</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 功能区域 -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title animated">
+                <h2>核心功能</h2>
+                <p>专为立直麻将赛事设计的全方位计分解决方案</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card animated delay-1">
+                    <div class="feature-icon">📊</div>
+                    <h3>实时计分</h3>
+                    <p>自动计算符数、翻数和点数，支持多种规则设定，实时更新比赛数据。</p>
+                </div>
+                
+                <div class="feature-card animated delay-2">
+                    <div class="feature-icon">🏆</div>
+                    <h3>排名系统</h3>
+                    <p>动态生成选手排名，支持多种排名算法，实时展示比赛结果。</p>
+                </div>
+                
+                <div class="feature-card animated delay-3">
+                    <div class="feature-icon">📱</div>
+                    <h3>多端支持</h3>
+                    <p>完美适配手机、平板和电脑，随时随地查看和管理比赛。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 行动号召 -->
+    <section class="cta">
+        <div class="container">
+            <h2>开始组织您的麻将赛事</h2>
+            <p>无论是小型聚会还是大型锦标赛，我们的系统都能为您提供专业的计分解决方案</p>
+            <a href="#" class="btn">立即使用</a>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>立直麻将计分系统</h3>
+                    <p>专为麻将爱好者设计的专业赛事计分平台</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>开发者</h3>
+                    <p>超级圣光铠甲</p>
+                    <p>Super Holy Armor</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>链接</h3>
+                    <p><a href="#" style="color: #fff; opacity: 0.8;">使用文档</a></p>
+                    <p><a href="#" style="color: #fff; opacity: 0.8;">GitHub项目</a></p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2023 立直麻将赛事计分系统 | 超级圣光铠甲 版权所有</p>
+                <p>© 2023 Riichi Mahjong Tournament Scoring System | Super Holy Armor All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 简单的滚动动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.animated');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.visibility = 'visible';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animatedElements.forEach(element => {
+                element.style.visibility = 'hidden';
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>
