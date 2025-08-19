@@ -107,13 +107,15 @@ class EventAdapter extends TypeAdapter<Event> {
       totalScoreCheck: fields[4] as int,
       originPoint: fields[5] as int,
       positionPoints: (fields[6] as Map).cast<int, int>(),
+      isScoreCheckEnabled: fields[8] as bool,
+      playerColumns: (fields[7] as List?)?.cast<ColumnConfig>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Event obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -127,7 +129,11 @@ class EventAdapter extends TypeAdapter<Event> {
       ..writeByte(5)
       ..write(obj.originPoint)
       ..writeByte(6)
-      ..write(obj.positionPoints);
+      ..write(obj.positionPoints)
+      ..writeByte(7)
+      ..write(obj.playerColumns)
+      ..writeByte(8)
+      ..write(obj.isScoreCheckEnabled);
   }
 
   @override

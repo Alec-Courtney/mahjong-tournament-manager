@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:mahjong_event_score/models/column_config.dart';
 
 part 'models.g.dart';
 
@@ -61,6 +62,10 @@ class Event extends HiveObject {
   int originPoint;
   @HiveField(6)
   Map<int, int> positionPoints;
+  @HiveField(7)
+  List<ColumnConfig> playerColumns;
+  @HiveField(8)
+  bool isScoreCheckEnabled;
 
   Event({
     required this.id,
@@ -70,7 +75,25 @@ class Event extends HiveObject {
     required this.totalScoreCheck,
     required this.originPoint,
     required this.positionPoints,
-  });
+    this.isScoreCheckEnabled = true,
+    List<ColumnConfig>? playerColumns,
+  }) : playerColumns = playerColumns ?? Event.defaultPlayerColumns();
+
+  static List<ColumnConfig> defaultPlayerColumns() {
+    return [
+      ColumnConfig(columnName: '排名', dataKey: 'rank', isVisible: true),
+      ColumnConfig(columnName: '选手', dataKey: 'name', isVisible: true),
+      ColumnConfig(columnName: '总分', dataKey: 'totalScore', isVisible: true),
+      ColumnConfig(columnName: '对局数', dataKey: 'gamesPlayed', isVisible: true),
+      ColumnConfig(columnName: '一位率', dataKey: 'rank1Rate', isVisible: false),
+      ColumnConfig(columnName: '二位率', dataKey: 'rank2Rate', isVisible: false),
+      ColumnConfig(columnName: '三位率', dataKey: 'rank3Rate', isVisible: false),
+      ColumnConfig(columnName: '四位率', dataKey: 'rank4Rate', isVisible: false),
+      ColumnConfig(columnName: '避四率', dataKey: 'avoidFourthRate', isVisible: true),
+      ColumnConfig(columnName: '连对率', dataKey: 'consecutiveTopTwoRate', isVisible: false),
+      ColumnConfig(columnName: '平均顺位', dataKey: 'averageRank', isVisible: false),
+    ];
+  }
 }
 
 @HiveType(typeId: 4)

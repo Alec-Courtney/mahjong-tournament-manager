@@ -14,15 +14,16 @@ class EventCreationScreen extends StatefulWidget {
 class _EventCreationScreenState extends State<EventCreationScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _totalScoreCheckController = TextEditingController();
-  final _originPointController = TextEditingController();
-  final _pos1PtController = TextEditingController();
-  final _pos2PtController = TextEditingController();
-  final _pos3PtController = TextEditingController();
-  final _pos4PtController = TextEditingController();
+  final _totalScoreCheckController = TextEditingController(text: '100000');
+  final _originPointController = TextEditingController(text: '25000');
+  final _pos1PtController = TextEditingController(text: '15');
+  final _pos2PtController = TextEditingController(text: '5');
+  final _pos3PtController = TextEditingController(text: '-5');
+  final _pos4PtController = TextEditingController(text: '-15');
 
   MahjongType _mahjongType = MahjongType.fourPlayer;
   bool _isTeamCompetition = false;
+  bool _isScoreCheckEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +67,15 @@ class _EventCreationScreenState extends State<EventCreationScreen> {
               onChanged: (value) {
                 setState(() {
                   _isTeamCompetition = value;
+                });
+              },
+            ),
+            SwitchListTile(
+              title: const Text('启用总分检查'),
+              value: _isScoreCheckEnabled,
+              onChanged: (value) {
+                setState(() {
+                  _isScoreCheckEnabled = value;
                 });
               },
             ),
@@ -152,6 +162,7 @@ class _EventCreationScreenState extends State<EventCreationScreen> {
                       3: int.parse(_pos3PtController.text),
                       4: int.parse(_pos4PtController.text),
                     },
+                    isScoreCheckEnabled: _isScoreCheckEnabled,
                   );
                   Provider.of<EventProvider>(context, listen: false).addEvent(event);
                   Navigator.of(context).pop();
